@@ -1,8 +1,9 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { FileIcon, UploadCloudIcon, XIcon } from "lucide-react";
 import { Button } from "../ui/button";
+import axios from "axios";
 
 export default function ProductImageUpload({ file, setFile, url, setUrl }) {
   const inputRef = useRef(null);
@@ -28,6 +29,24 @@ export default function ProductImageUpload({ file, setFile, url, setUrl }) {
     setFile(null);
     if (inputRef.current) inputRef.current.value = "";
   };
+
+  async function uploadImageToCloud() {
+    const data = new FormData();
+    data.append("my_file", file);
+    const res = await axios.post(
+      "http://localhost:3000/api/admin/products/upload-image",
+      data,
+    );
+    if (res.data?.success) {
+      setUrl(res.data?.result?.url);
+    }
+  }
+
+  useEffect(() => {
+    if (file != null) {
+      uploadImageToCloud();
+    }
+  }, [file]);
 
   return (
     <div className="space-y-3">
@@ -78,7 +97,6 @@ export default function ProductImageUpload({ file, setFile, url, setUrl }) {
               </p>
             </div>
 
-            
             <Button
               onClick={handleRemove}
               type="button"

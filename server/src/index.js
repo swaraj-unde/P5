@@ -1,11 +1,14 @@
+import dotenv from "dotenv";
+dotenv.config({
+  path: "./.env",
+});
+
 import express from "express";
 import mongoose from "mongoose";
-import dotenv from "dotenv";
 import cookieParse from "cookie-parser";
 import cors from "cors";
 import authRouter from "./routes/auth/auth.routes.js";
-
-dotenv.config();
+import adminProductRouter from "./routes/admin/product.routes.js";
 
 mongoose
   .connect(process.env.MONGO_URL)
@@ -37,6 +40,7 @@ app.use(cookieParse());
 app.use(express.json());
 
 app.use("/api/auth", authRouter);
+app.use("/api/admin/products", adminProductRouter);
 
 const PORT = process.env.PORT || 3000;
 

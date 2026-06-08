@@ -17,5 +17,4 @@ async function imageUploadUtil(file) {
 const storage = new multer.memoryStorage();
 const upload = multer({ storage });
 
-
 export { upload, imageUploadUtil };
