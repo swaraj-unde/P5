@@ -4,8 +4,16 @@ import { Input } from "../ui/input";
 import { FileIcon, UploadCloudIcon, XIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import axios from "axios";
+import { Skeleton } from "../ui/skeleton";
 
-export default function ProductImageUpload({ file, setFile, url, setUrl }) {
+export default function ProductImageUpload({
+  file,
+  setFile,
+  url,
+  setUrl,
+  setImageLoading,
+  imageLoading,
+}) {
   const inputRef = useRef(null);
 
   const handleChange = (e) => {
@@ -31,14 +39,24 @@ export default function ProductImageUpload({ file, setFile, url, setUrl }) {
   };
 
   async function uploadImageToCloud() {
-    const data = new FormData();
-    data.append("my_file", file);
-    const res = await axios.post(
-      "http://localhost:3000/api/admin/products/upload-image",
-      data,
-    );
-    if (res.data?.success) {
-      setUrl(res.data?.result?.url);
+    try {
+      setImageLoading(true);
+
+      const data = new FormData();
+      data.append("my_file", file);
+
+      const res = await axios.post(
+        "http://localhost:3000/api/admin/products/upload-image",
+        data,
+      );
+
+      if (res.data?.success) {
+        setUrl(res.data?.result?.secure_url || res.data?.result?.url);
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setImageLoading(false);
     }
   }
 
@@ -88,6 +106,8 @@ export default function ProductImageUpload({ file, setFile, url, setUrl }) {
               <p className="text-xs text-zinc-500 mt-1">PNG, JPG up to 5MB</p>
             </div>
           </>
+        ) : imageLoading ? (
+          <Skeleton className="h-12 w-full rounded-lg bg-zinc-900 border border-zinc-800 animate-pulse" />
         ) : (
           <div className="w-full flex items-center justify-between bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3">
             <div className="flex items-center gap-3">
