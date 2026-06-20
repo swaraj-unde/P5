@@ -9,7 +9,7 @@ const getFilteredProducts = async (req, res) => {
       filter.category = { $in: category.split(",") };
     }
     if (brand.length) {
-      filter.category = { $in: brand.split(",") };
+      filter.brand = { $in: brand.split(",") };
     }
 
     let sort = {};
