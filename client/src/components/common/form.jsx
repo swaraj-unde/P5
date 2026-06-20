@@ -16,6 +16,7 @@ export default function CommonForm({
   setFormData,
   onSubmit,
   buttonText,
+  isBtnDisabled,
 }) {
   function renderInputs(item) {
     const value = formData[item.name] || "";
@@ -120,6 +121,7 @@ export default function CommonForm({
 
       <Button
         type="submit"
+        disabled={isBtnDisabled}
         className="w-full bg-white text-black hover:bg-zinc-200 font-medium"
       >
         {buttonText || "Submit"}

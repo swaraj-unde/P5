@@ -9,7 +9,12 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { addProductFormElements } from "@/config";
-import { addProduct, fetchAllProducts } from "@/store/admin/products-slice";
+import {
+  addProduct,
+  deleteProduct,
+  editProduct,
+  fetchAllProducts,
+} from "@/store/admin/products-slice";
 import { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
@@ -38,6 +43,12 @@ export default function AdminProducts() {
 
   const dispatch = useDispatch();
 
+  function isFormValid() {
+    return Object.keys(formData)
+      .map((key) => formData[key] !== "")
+      .every((item) => item);
+  }
+
   useEffect(() => {
     dispatch(fetchAllProducts());
   }, [dispatch]);
@@ -45,16 +56,35 @@ export default function AdminProducts() {
   function onSubmit(e) {
     e.preventDefault();
 
-    dispatch(addProduct({ ...formData, image: imageUrl })).then((data) => {
+    currentEditId !== null
+      ? dispatch(editProduct({ id: currentEditId, formData })).then((data) => {
+          if (data?.payload?.success) {
+            dispatch(fetchAllProducts());
+
+            setFormData(initialState);
+            setOpenCreatePrd(false);
+            setCurrentEditId(null);
+            toast.success(data.payload.message);
+          }
+        })
+      : dispatch(addProduct({ ...formData, image: imageUrl })).then((data) => {
+          if (data?.payload?.success) {
+            dispatch(fetchAllProducts());
+
+            setImageFile(null);
+            setImageUrl("");
+            setFormData(initialState);
+            setOpenCreatePrd(false);
+
+            toast.success(data.payload.message);
+          }
+        });
+  }
+
+  function handleDelete(getCurrentProductId) {
+    dispatch(deleteProduct(getCurrentProductId)).then((data) => {
       if (data?.payload?.success) {
         dispatch(fetchAllProducts());
-
-        setImageFile(null);
-        setImageUrl("");
-        setFormData(initialState);
-
-        toast.success(data.payload.message);
-        setOpenCreatePrd(false);
       }
     });
   }
@@ -85,7 +115,14 @@ export default function AdminProducts() {
         {productList?.length > 0 ? (
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {productList.map((product) => (
-              <AdminProductTile key={product._id} product={product} />
+              <AdminProductTile
+                key={product._id}
+                product={product}
+                setCurrentEditId={setCurrentEditId}
+                setOpenCreatePrd={setOpenCreatePrd}
+                setFormData={setFormData}
+                handleDelete={handleDelete}
+              />
             ))}
           </div>
         ) : (
@@ -103,17 +140,26 @@ export default function AdminProducts() {
       </div>
 
       {/* Add Product Sheet */}
-      <Sheet open={openCreatePrd} onOpenChange={setOpenCreatePrd}>
+      <Sheet
+        open={openCreatePrd}
+        onOpenChange={() => {
+          setOpenCreatePrd(false);
+          setCurrentEditId(null);
+          setFormData(initialState);
+        }}
+      >
         <SheetContent
           side="right"
           className="w-full sm:max-w-lg bg-zinc-950 text-white border-l border-zinc-800 p-0"
         >
           <SheetHeader className="border-b border-zinc-800 px-6 py-5">
             <SheetTitle className="text-xl font-semibold text-white">
-              Add New Product
+              {currentEditId !== null ? "Edit Product" : "Add New Product"}
             </SheetTitle>
             <p className="text-sm text-zinc-400">
-              Fill in the details below to create a new product.
+              {currentEditId !== null
+                ? "Fill in the details below to edit the product."
+                : "Fill in the details below to create a new product."}
             </p>
           </SheetHeader>
 
@@ -127,6 +173,7 @@ export default function AdminProducts() {
                 setUrl={setImageUrl}
                 setImageLoading={setImageLoading}
                 imageLoading={imageLoading}
+                isEditMode={currentEditId !== null}
               />
             </div>
 
@@ -137,7 +184,14 @@ export default function AdminProducts() {
                 formData={formData}
                 setFormData={setFormData}
                 onSubmit={onSubmit}
-                buttonText={imageLoading ? "Uploading..." : "Create Product"}
+                buttonText={
+                  currentEditId !== null
+                    ? "Edit Product"
+                    : imageLoading
+                      ? "Uploading..."
+                      : "Create Product"
+                }
+                isBtnDisabled={!isFormValid()}
               />
             </div>
           </div>

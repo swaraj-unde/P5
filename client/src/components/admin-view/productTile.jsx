@@ -1,6 +1,12 @@
 import { Button } from "../ui/button";
 
-export default function AdminProductTile({ product }) {
+export default function AdminProductTile({
+  product,
+  setCurrentEditId,
+  setOpenCreatePrd,
+  setFormData,
+  handleDelete,
+}) {
   const discounted =
     product?.salePrice > 0 && product?.salePrice < product?.price;
 
@@ -44,7 +50,7 @@ export default function AdminProductTile({ product }) {
             ₹{product?.salePrice || product?.price}
           </span>
 
-          {product?.salePrice > 0 && product?.salePrice<product?.price && (
+          {product?.salePrice > 0 && product?.salePrice < product?.price && (
             <span className="text-xs text-zinc-500 line-through">
               ₹{product?.price}
             </span>
@@ -58,11 +64,20 @@ export default function AdminProductTile({ product }) {
           size="sm"
           variant="ghost"
           className="bg-zinc-800 text-white hover:bg-zinc-700"
+          onClick={() => {
+            setOpenCreatePrd(true);
+            setCurrentEditId(product._id);
+            setFormData(product);
+          }}
         >
           Edit
         </Button>
 
-        <Button size="sm" className="bg-red-600 hover:bg-red-700">
+        <Button
+          onClick={() => handleDelete(product?._id)}
+          size="sm"
+          className="bg-red-600 hover:bg-red-700"
+        >
           Delete
         </Button>
       </div>

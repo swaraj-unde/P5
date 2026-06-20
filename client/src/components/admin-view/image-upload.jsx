@@ -13,6 +13,7 @@ export default function ProductImageUpload({
   setUrl,
   setImageLoading,
   imageLoading,
+  isEditMode,
 }) {
   const inputRef = useRef(null);
 
@@ -93,6 +94,7 @@ export default function ProductImageUpload({
           ref={inputRef}
           onChange={handleChange}
           className="hidden"
+          disabled={isEditMode}
         />
 
         {!file ? (
