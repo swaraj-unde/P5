@@ -1,4 +1,5 @@
 import ProductFilter from "@/components/shopping-view/filter";
+import { ProductDetailBox } from "@/components/shopping-view/product-detail";
 import ShoppingProductTile from "@/components/shopping-view/productTile";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,6 +26,7 @@ export default function ShopListing() {
     (state) => state.shopProduct,
   );
   const [searchParams, setSearchParams] = useSearchParams();
+  const [open, setOpen] = useState(false);
 
   console.log(productDetails);
 
@@ -81,6 +83,9 @@ export default function ShopListing() {
     setFilters(copyFilters);
     sessionStorage.setItem("filters", JSON.stringify(copyFilters));
   }
+  useEffect(() => {
+    if (productDetails !== null) setOpen(true);
+  }, [productDetails]);
 
   useEffect(() => {
     setSort("price-lowtohigh");
@@ -89,7 +94,6 @@ export default function ShopListing() {
 
   function handelGetProduct(getId) {
     dispatch(fetchProductDetails(getId));
-    console.log(getId);
   }
 
   return (
@@ -166,6 +170,11 @@ export default function ShopListing() {
           </main>
         </div>
       </div>
+      <ProductDetailBox
+        open={open}
+        setOpen={setOpen}
+        product={productDetails}
+      />
     </div>
   );
 }
