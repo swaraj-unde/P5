@@ -1,3 +1,4 @@
+import { brandOptionsMap, categoryOptionsMap } from "@/config";
 import { Button } from "../ui/button";
 
 export default function ShoppingProductTile({ product, handelGetProduct }) {
@@ -54,10 +55,12 @@ export default function ShoppingProductTile({ product, handelGetProduct }) {
 
         <div className="mt-2 flex items-center justify-between">
           <span className="rounded-md bg-zinc-800 px-2 py-1 text-xs text-zinc-300">
-            {product?.category}
+            {categoryOptionsMap[product?.category]}
           </span>
 
-          <span className="text-xs text-zinc-500">{product?.brand}</span>
+          <span className="text-xs text-zinc-500">
+            {brandOptionsMap[product?.brand]}
+          </span>
         </div>
 
         <div className="mt-3 flex items-center gap-2">
