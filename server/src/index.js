@@ -11,6 +11,7 @@ import authRouter from "./routes/auth/auth.routes.js";
 import adminProductRouter from "./routes/admin/product.routes.js";
 import shopProductRouter from "./routes/shop/product.routes.js";
 import shopCartRouter from "./routes/shop/cart.routes.js";
+import shopAddressRouter from "./routes/shop/address.routes.js";
 
 mongoose
   .connect(process.env.MONGO_URL)
@@ -45,6 +46,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/admin/products", adminProductRouter);
 app.use("/api/shop/products", shopProductRouter);
 app.use("/api/shop/cart", shopCartRouter);
+app.use("/api/shop/address", shopAddressRouter);
 
 const PORT = process.env.PORT || 3000;
 
