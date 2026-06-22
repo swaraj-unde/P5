@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addNewAddress,
   deleteAddress,
+  editAddress,
   fetchAllAddresses,
 } from "@/store/shop/address-slice";
 import { toast } from "sonner";
@@ -21,6 +22,7 @@ const initialFormData = {
 
 export default function Address() {
   const [formData, setFormData] = useState(initialFormData);
+  const [editId, setEditId] = useState(null);
 
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
@@ -37,18 +39,33 @@ export default function Address() {
 
     if (!user?.id) return;
 
-    dispatch(
-      addNewAddress({
-        ...formData,
-        userId: user.id,
-      }),
-    ).then((data) => {
-      if (data?.payload?.success) {
-        setFormData(initialFormData);
-        toast.success(data.payload.message);
-        dispatch(fetchAllAddresses(user.id));
-      }
-    });
+    editId !== null
+      ? dispatch(
+          editAddress({
+            userId: user?.id,
+            addressId: editId,
+            formData,
+          }),
+        ).then((data) => {
+          if (data?.payload?.success) {
+            dispatch(fetchAllAddresses(user?.id));
+            setFormData(initialFormData);
+            setEditId(null);
+            toast.success(data.payload.message);
+          }
+        })
+      : dispatch(
+          addNewAddress({
+            ...formData,
+            userId: user.id,
+          }),
+        ).then((data) => {
+          if (data?.payload?.success) {
+            setFormData(initialFormData);
+            toast.success(data.payload.message);
+            dispatch(fetchAllAddresses(user.id));
+          }
+        });
   }
 
   function isFormValid() {
@@ -67,7 +84,17 @@ export default function Address() {
       }
     });
   }
-  function handleEdit(currAddress) {}
+  function handleEdit(currAddress) {
+    setEditId(currAddress?._id);
+    setFormData({
+      ...formData,
+      address: currAddress.address,
+      city: currAddress.city,
+      phone: currAddress.phone,
+      pincode: currAddress.pincode,
+      notes: currAddress.notes,
+    });
+  }
 
   return (
     <Card className="bg-zinc-900 border border-zinc-800 text-white shadow-lg">
@@ -90,7 +117,9 @@ export default function Address() {
         </div>
 
         <div className="text-sm text-zinc-400">
-          Add a new delivery address below
+          {editId === null
+            ? "Add a new delivery address below"
+            : "Edit delivery address below"}
         </div>
 
         <div className="rounded-lg border border-zinc-800 bg-zinc-950 p-4">
@@ -98,7 +127,7 @@ export default function Address() {
             formControls={addressFormControls}
             formData={formData}
             setFormData={setFormData}
-            buttonText="Add Address"
+            buttonText={editId === null ? "Add Address" : "Edit Address"}
             onSubmit={handleAddAddress}
             isBtnDisabled={!isFormValid()}
           />

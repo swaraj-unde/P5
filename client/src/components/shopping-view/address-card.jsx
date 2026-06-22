@@ -52,7 +52,7 @@ export default function AddressCard({ address, onEdit, onDelete }) {
 
 
       <div className="flex justify-end gap-3 mt-5 pt-4 border-t border-zinc-800">
-        
+
         <button
           onClick={() => onEdit?.(address)}
           className="flex items-center gap-2 px-3 py-1.5 rounded-md border border-zinc-700 text-zinc-300 hover:text-white hover:border-zinc-500 hover:bg-zinc-800 transition"
