@@ -20,16 +20,35 @@ import { useEffect, useState } from "react";
 import { fetchCartItems } from "@/store/shop/cart-slice";
 
 function MenuItems() {
+  const navigate = useNavigate();
+
+  function handleNavigateToPage(menuItem) {
+    console.log(menuItem);
+
+    if (menuItem.id === "home" || menuItem.id === "products") {
+      sessionStorage.removeItem("filters");
+    } else {
+      sessionStorage.setItem(
+        "filters",
+        JSON.stringify({
+          category: [menuItem.id],
+        }),
+      );
+    }
+
+    navigate(menuItem.path);
+  }
+
   return (
     <nav className="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-6">
       {shoppingViewHeaderMenuItems.map((item) => (
-        <Link
+        <button
           key={item.id}
-          to={item.path}
+          onClick={() => handleNavigateToPage(item)}
           className="text-sm font-medium text-zinc-400 transition-colors hover:text-white"
         >
           {item.label}
-        </Link>
+        </button>
       ))}
     </nav>
   );
@@ -75,7 +94,6 @@ function HeaderRightContent() {
           }
         ></UserCartWrapper>
       </Sheet>
-
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -123,7 +141,6 @@ export default function ShopHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-zinc-800 bg-zinc-950/95 backdrop-blur">
       <div className="mx-auto flex h-16 items-center justify-between px-4 lg:px-8">
-        
         <Link to="/shop/home" className="flex items-center gap-3 text-white">
           <div className="rounded-lg bg-zinc-800 p-2">
             <HousePlug className="h-5 w-5" />
@@ -131,7 +148,6 @@ export default function ShopHeader() {
 
           <span className="text-lg font-bold tracking-tight">Ecommerce</span>
         </Link>
-
 
         <div className="hidden lg:flex items-center gap-10">
           <MenuItems />
@@ -147,7 +163,6 @@ export default function ShopHeader() {
             </Button>
           )}
         </div>
-
 
         <Sheet>
           <SheetTrigger asChild>

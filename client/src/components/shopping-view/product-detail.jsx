@@ -1,4 +1,6 @@
+import { useDispatch } from "react-redux";
 import { Dialog, DialogContent } from "../ui/dialog";
+import { setProductDetails } from "@/store/shop/product-slice";
 
 export function ProductDetailBox({ open, setOpen, product, handleAddToCart }) {
   if (!product) return null;
@@ -12,8 +14,15 @@ export function ProductDetailBox({ open, setOpen, product, handleAddToCart }) {
 
   const stock = product?.totalStock || 0;
 
+  const dispatch = useDispatch();
+
+  function handleDialogClose() {
+    setOpen(false);
+    dispatch(setProductDetails());
+  }
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleDialogClose}>
       <DialogContent
         className="
           p-0 overflow-hidden bg-zinc-950 text-white border border-zinc-800
@@ -122,7 +131,7 @@ export function ProductDetailBox({ open, setOpen, product, handleAddToCart }) {
 
             <button
               disabled={stock === 0}
-              onClick={()=>handleAddToCart(product._id)}
+              onClick={() => handleAddToCart(product._id)}
               className="w-full rounded bg-white py-2 font-medium text-black hover:bg-zinc-200 disabled:bg-zinc-700 disabled:text-zinc-400"
             >
               {stock > 0 ? "Add to Cart" : "Out of Stock"}
