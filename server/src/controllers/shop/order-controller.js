@@ -1,4 +1,6 @@
+import { Cart } from "../../models/cart.model.js";
 import { Order } from "../../models/order.model.js";
+import { Product } from "../../models/product.model.js";
 import { paypal } from "../../utils/paypal.js";
 
 export const createOrder = async (req, res) => {
@@ -112,49 +114,62 @@ const capturePayment = async (req, res) => {
   try {
     const { paymentId, payerId, orderId } = req.body;
 
-    let order = await Order.findById(orderId);
+    const order = await Order.findById(orderId);
 
     if (!order) {
       return res.status(404).json({
         success: false,
-        message: "Order can not be found",
+        message: "Order cannot be found",
       });
     }
 
-    order.paymentStatus = "paid";
-    order.orderStatus = "confirmed";
-    order.paymentId = paymentId;
-    order.payerId = payerId;
 
-    for (let item of order.cartItems) {
-      let product = await Product.findById(item.productId);
+    for (const item of order.cartItems) {
+      const product = await Product.findById(item.productId);
 
       if (!product) {
         return res.status(404).json({
           success: false,
-          message: `Not enough stock for this product ${product.title}`,
+          message: `Product not found`,
         });
       }
+
+      if (product.totalStock < item.quantity) {
+        return res.status(400).json({
+          success: false,
+          message: `${product.title} has only ${product.totalStock} item(s) left in stock`,
+        });
+      }
+    }
+
+
+    for (const item of order.cartItems) {
+      const product = await Product.findById(item.productId);
 
       product.totalStock -= item.quantity;
 
       await product.save();
     }
 
-    const getCartId = order.cartId;
-    await Cart.findByIdAndDelete(getCartId);
+
+    order.paymentStatus = "paid";
+    order.orderStatus = "inProcess";
+    order.paymentId = paymentId;
+    order.payerId = payerId;
+    order.orderUpdateDate = new Date();
 
     await order.save();
 
-    res.status(200).json({
+
+    await Cart.findByIdAndUpdate(order.cartId, {
+      items: [],
+    });
+
+    return res.status(200).json({
       success: true,
       message: "Order confirmed",
       data: order,
     });
-
-
-
-
   } catch (error) {
     return res.status(500).json({
       success: false,
@@ -162,5 +177,6 @@ const capturePayment = async (req, res) => {
     });
   }
 };
+
 
 export { capturePayment };

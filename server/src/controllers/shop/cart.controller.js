@@ -37,10 +37,10 @@ const addToCart = async (req, res) => {
     const existingQty = currInd === -1 ? 0 : cart.items[currInd].quantity;
     const totalQty = existingQty + quantity;
 
-    if (totalQty > product.quantity) {
+    if (totalQty > product.totalStock) {
       return res.status(400).json({
         success: false,
-        message: `Only ${product.quantity} items available in stock`,
+        message: `Only ${product.totalStock} items available in stock`,
       });
     }
 
@@ -165,10 +165,10 @@ const updateCartItemQuantity = async (req, res) => {
       });
     }
 
-    if (quantity > product.quantity) {
+    if (quantity > product.totalStock) {
       return res.status(400).json({
         success: false,
-        message: `Only ${product.quantity} items available in stock`,
+        message: `Only ${product.totalStock} items available in stock`,
       });
     }
 

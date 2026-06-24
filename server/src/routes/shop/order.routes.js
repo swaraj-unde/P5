@@ -7,6 +7,6 @@ import {
 const router = Router();
 
 router.post("/create", createOrder);
-router.get("/capture", capturePayment);
+router.post("/capture", capturePayment);
 
 export default router;
