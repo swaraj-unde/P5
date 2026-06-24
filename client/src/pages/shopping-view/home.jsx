@@ -128,6 +128,7 @@ function ShoppingHome() {
       <div className="relative h-[600px] w-full overflow-hidden border-b border-zinc-800">
         {featureImageList.map((slide, index) => (
           <img
+            onClick={() => navigate("/shop/listing")}
             key={index}
             src={slide}
             alt={`banner-${index}`}

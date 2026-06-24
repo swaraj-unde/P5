@@ -9,9 +9,9 @@ import {
   TableRow,
 } from "../ui/table";
 import { Dialog, DialogTrigger } from "../ui/dialog";
-import ShoppingOrderDetailsView from "./order-details";
+import AdminOrdersDetailsView from "./orders-details";
 
-export default function ShoppingOrders() {
+export default function AdminOrdersView() {
   return (
     <Card className="bg-zinc-950 border-zinc-800 text-zinc-100 shadow-xl">
       <CardHeader className="border-b border-zinc-800">
@@ -61,7 +61,7 @@ export default function ShoppingOrders() {
                       </Button>
                     </DialogTrigger>
 
-                    <ShoppingOrderDetailsView />
+                    <AdminOrdersDetailsView />
                   </Dialog>
                 </TableCell>
               </TableRow>
