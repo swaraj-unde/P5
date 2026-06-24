@@ -21,6 +21,7 @@ import { useEffect } from "react";
 import { checkAuth } from "./store/auth-slice";
 import LoadingScreen from "./components/common/loading";
 import PaypalReturnPage from "./pages/shopping-view/paypal-return";
+import PaymentSuccessPage from "./pages/shopping-view/payment-success";
 
 
 
@@ -77,6 +78,7 @@ function App() {
           <Route path="account" element={<ShopAccount />}></Route>
           <Route path="checkout" element={<ShopCheckout />}></Route>
           <Route path="paypal-return" element={<PaypalReturnPage   />}></Route>
+          <Route path="payment-success" element={<PaymentSuccessPage   />}></Route>
         </Route>
         <Route path="/unauth-page" element={<UnAuthPage />}></Route>
         <Route path="*" element={<NotFound />}></Route>

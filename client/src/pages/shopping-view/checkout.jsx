@@ -24,6 +24,16 @@ export default function ShopCheckout() {
 
   const dispatch = useDispatch();
   function handlePaypalPayment() {
+    if (currSelAddress === null || Object.keys(currSelAddress).length === 0) {
+      toast.error("Please select a delivery address");
+      return;
+    }
+
+    if (cartItems.length === 0) {
+      toast.error("Cart is Empty");
+      return;
+    }
+
     const orderData = {
       userId: user.id,
       cartItems: cartItems.items.map((item) => ({
@@ -92,7 +102,10 @@ export default function ShopCheckout() {
               </p>
             </div>
 
-            <Address setCurrSelAddress={setCurrSelAddress} />
+            <Address
+              setCurrSelAddress={setCurrSelAddress}
+              currSelAddress={currSelAddress}
+            />
           </div>
 
           <div className="xl:col-span-1">

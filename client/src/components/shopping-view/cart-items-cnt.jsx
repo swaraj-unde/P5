@@ -25,14 +25,7 @@ export function UserCartItems({ cartItem }) {
   function handleUpdateQuantity(getCartItem, type) {
     const newQuantity =
       type === "minus" ? getCartItem.quantity - 1 : getCartItem.quantity + 1;
-
     if (newQuantity < 1) return;
-
-    if (newQuantity > getCartItem.stock) {
-      toast.error(`Only ${getCartItem.stock} items available`);
-      return;
-    }
-
     dispatch(
       updateCartQuantity({
         userId: user?.id,
@@ -84,7 +77,6 @@ export function UserCartItems({ cartItem }) {
         </span>
 
         <Button
-          disabled={cartItem.quantity >= cartItem.stock}
           onClick={() => handleUpdateQuantity(cartItem, "plus")}
           size="icon"
           variant="outline"
