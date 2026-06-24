@@ -34,6 +34,16 @@ const addToCart = async (req, res) => {
       (item) => item.productId.toString() === productId.toString(),
     );
 
+    const existingQty = currInd === -1 ? 0 : cart.items[currInd].quantity;
+    const totalQty = existingQty + quantity;
+
+    if (totalQty > product.quantity) {
+      return res.status(400).json({
+        success: false,
+        message: `Only ${product.quantity} items available in stock`,
+      });
+    }
+
     if (currInd === -1) {
       cart.items.push({
         productId,
@@ -143,6 +153,22 @@ const updateCartItemQuantity = async (req, res) => {
       return res.status(404).json({
         success: false,
         message: "Item not found in cart",
+      });
+    }
+
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+    }
+
+    if (quantity > product.quantity) {
+      return res.status(400).json({
+        success: false,
+        message: `Only ${product.quantity} items available in stock`,
       });
     }
 

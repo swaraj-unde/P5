@@ -20,7 +20,7 @@ const initialFormData = {
   notes: "",
 };
 
-export default function Address() {
+export default function Address({ setCurrSelAddress }) {
   const [formData, setFormData] = useState(initialFormData);
   const [editId, setEditId] = useState(null);
 
@@ -108,6 +108,7 @@ export default function Address() {
           {addressList?.length > 0 &&
             addressList.map((address) => (
               <AddressCard
+                setCurrSelAddress={setCurrSelAddress}
                 onDelete={handleDelete}
                 onEdit={handleEdit}
                 key={address._id || address.id}

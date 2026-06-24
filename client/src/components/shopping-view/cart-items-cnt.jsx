@@ -28,6 +28,11 @@ export function UserCartItems({ cartItem }) {
 
     if (newQuantity < 1) return;
 
+    if (newQuantity > getCartItem.stock) {
+      toast.error(`Only ${getCartItem.stock} items available`);
+      return;
+    }
+
     dispatch(
       updateCartQuantity({
         userId: user?.id,
@@ -79,6 +84,7 @@ export function UserCartItems({ cartItem }) {
         </span>
 
         <Button
+          disabled={cartItem.quantity >= cartItem.stock}
           onClick={() => handleUpdateQuantity(cartItem, "plus")}
           size="icon"
           variant="outline"

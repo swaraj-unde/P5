@@ -20,6 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { checkAuth } from "./store/auth-slice";
 import LoadingScreen from "./components/common/loading";
+import PaypalReturnPage from "./pages/shopping-view/paypal-return";
 
 
 
@@ -75,6 +76,7 @@ function App() {
           <Route path="listing" element={<ShopListing />}></Route>
           <Route path="account" element={<ShopAccount />}></Route>
           <Route path="checkout" element={<ShopCheckout />}></Route>
+          <Route path="paypal-return" element={<PaypalReturnPage   />}></Route>
         </Route>
         <Route path="/unauth-page" element={<UnAuthPage />}></Route>
         <Route path="*" element={<NotFound />}></Route>

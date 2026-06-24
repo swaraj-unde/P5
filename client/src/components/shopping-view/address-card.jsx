@@ -1,11 +1,18 @@
 import { MapPin, Phone, StickyNote, Pencil, Trash2 } from "lucide-react";
 
-export default function AddressCard({ address, onEdit, onDelete }) {
+export default function AddressCard({
+  address,
+  onEdit,
+  onDelete,
+  setCurrSelAddress,
+}) {
   if (!address) return null;
 
   return (
-    <div className="rounded-xl border border-zinc-800 bg-zinc-950 p-5 shadow-md transition-all duration-200 hover:border-zinc-600 hover:bg-zinc-900">
-
+    <div
+      onClick={setCurrSelAddress ? () => setCurrSelAddress(address) : null}
+      className="rounded-xl border border-zinc-800 bg-zinc-950 p-5 shadow-md transition-all duration-200 hover:border-zinc-600 hover:bg-zinc-900"
+    >
       <div className="flex gap-3 border-b border-zinc-800 pb-4">
         <MapPin className="mt-1 h-5 w-5 text-zinc-400 shrink-0" />
 
@@ -24,7 +31,6 @@ export default function AddressCard({ address, onEdit, onDelete }) {
         </div>
       </div>
 
-
       <div className="flex gap-3 border-b border-zinc-800 py-4">
         <Phone className="h-5 w-5 text-zinc-400 shrink-0" />
 
@@ -34,7 +40,6 @@ export default function AddressCard({ address, onEdit, onDelete }) {
           <p className="text-white font-medium">{address?.phone}</p>
         </div>
       </div>
-
 
       {address?.notes?.trim() && (
         <div className="flex gap-3 pt-4">
@@ -50,9 +55,7 @@ export default function AddressCard({ address, onEdit, onDelete }) {
         </div>
       )}
 
-
       <div className="flex justify-end gap-3 mt-5 pt-4 border-t border-zinc-800">
-
         <button
           onClick={() => onEdit?.(address)}
           className="flex items-center gap-2 px-3 py-1.5 rounded-md border border-zinc-700 text-zinc-300 hover:text-white hover:border-zinc-500 hover:bg-zinc-800 transition"
@@ -60,7 +63,6 @@ export default function AddressCard({ address, onEdit, onDelete }) {
           <Pencil className="h-4 w-4" />
           Edit
         </button>
-
 
         <button
           onClick={() => onDelete?.(address)}

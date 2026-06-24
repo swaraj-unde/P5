@@ -1,7 +1,10 @@
 import img from "@/assets/account.jpg";
 import Address from "@/components/shopping-view/address";
 import { UserCartItems } from "@/components/shopping-view/cart-items-cnt";
-import { useSelector } from "react-redux";
+import { createNewOrder } from "@/store/shop/order-slice";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "sonner";
 
 export default function ShopCheckout() {
   const { cartItems } = useSelector((state) => state.shopCart);
@@ -12,6 +15,50 @@ export default function ShopCheckout() {
         (item.salePrice > 0 ? item.salePrice : item.price) * item.quantity,
       0,
     ) || 0;
+
+  const { user } = useSelector((state) => state.auth);
+  const { approvalURL } = useSelector((state) => state.shopOrder);
+  const [currSelAddress, setCurrSelAddress] = useState({});
+
+  const [isPaymentStart, setIsPaymentStart] = useState(false);
+
+  const dispatch = useDispatch();
+  function handlePaypalPayment() {
+    const orderData = {
+      userId: user.id,
+      cartItems: cartItems.items.map((item) => ({
+        productId: item.productId,
+        title: item.title,
+        image: item.image,
+        price: item.salePrice > 0 ? item.salePrice : item.price,
+        quantity: item.quantity,
+      })),
+      addressInfo: {
+        addressId: currSelAddress?._id,
+        address: currSelAddress?.address,
+        city: currSelAddress?.city,
+        pincode: currSelAddress?.pincode,
+        phone: currSelAddress?.phone,
+        notes: currSelAddress?.notes,
+      },
+      totalAmount: totalAmount,
+      paymentMethod: "paypal",
+      cartId: cartItems._id,
+    };
+
+    dispatch(createNewOrder(orderData)).then((data) => {
+      if (data?.payload?.success) {
+        setIsPaymentStart(true);
+      } else {
+        setIsPaymentStart(false);
+      }
+    });
+  }
+
+  if (approvalURL) {
+    window.location.href = approvalURL;
+  }
+
   return (
     <div className="min-h-screen bg-black text-white">
       <div className="relative w-full overflow-hidden border-b border-zinc-800">
@@ -45,9 +92,8 @@ export default function ShopCheckout() {
               </p>
             </div>
 
-            <Address />
+            <Address setCurrSelAddress={setCurrSelAddress} />
           </div>
-
 
           <div className="xl:col-span-1">
             <div className="sticky top-6 rounded-2xl border border-zinc-800 bg-zinc-900 shadow-xl">
@@ -96,7 +142,10 @@ export default function ShopCheckout() {
                     </div>
                   </div>
 
-                  <button className="w-full mt-6 rounded-lg bg-white text-black py-3 font-semibold transition hover:bg-zinc-200">
+                  <button
+                    onClick={handlePaypalPayment}
+                    className="w-full mt-6 rounded-lg bg-white text-black py-3 font-semibold transition hover:bg-zinc-200"
+                  >
                     Place Order
                   </button>
                 </div>
