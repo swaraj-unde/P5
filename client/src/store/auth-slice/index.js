@@ -12,7 +12,7 @@ export const registerUser = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     try {
       const res = await axios.post(
-        `${process.env.API_URL}/auth/register`,
+        `${import.meta.env.VITE_API_URL}/auth/register`,
         formData,
         {
           withCredentials: true,
@@ -31,7 +31,7 @@ export const loginUser = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     try {
       const res = await axios.post(
-        `${process.env.API_URL}/auth/login`,
+        `${import.meta.env.VITE_API_URL}/auth/login`,
         formData,
         { withCredentials: true },
       );
@@ -48,7 +48,7 @@ export const logoutUser = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const res = await axios.post(
-        `${process.env.API_URL}/auth/logout`,
+        `${import.meta.env.VITE_API_URL}/auth/logout`,
         {},
         {
           withCredentials: true,
@@ -65,7 +65,7 @@ export const checkAuth = createAsyncThunk(
   "auth/check-auth",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.get(`${process.env.API_URL}/auth/check-auth`, {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/auth/check-auth`, {
         withCredentials: true,
         headers: {
           "Cache-Control":
