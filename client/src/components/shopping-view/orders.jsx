@@ -17,6 +17,7 @@ import {
   getOrderDetails,
   resetOrderDetails,
 } from "@/store/shop/order-slice";
+import { Badge } from "../ui/badge";
 
 export default function ShoppingOrders() {
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
@@ -78,9 +79,20 @@ export default function ShoppingOrders() {
                       </TableCell>
 
                       <TableCell>
-                        <span className="px-3 py-1 rounded-full text-xs font-medium bg-yellow-500/15 text-yellow-400 border border-yellow-500/30">
-                          {item.orderStatus}
-                        </span>
+                        <Badge
+                          className={`
+                            px-3 py-1
+                            ${
+                              item?.orderStatus === "delivered"
+                                ? "bg-green-500/15 text-green-400 border border-green-500/30"
+                                : item?.orderStatus === "rejected"
+                                  ? "bg-red-500/15 text-red-400 border border-red-500/30"
+                                  : "bg-yellow-500/15 text-yellow-400 border border-yellow-500/30"
+                            }
+                          `}
+                        >
+                          {item?.orderStatus}
+                        </Badge>
                       </TableCell>
 
                       <TableCell className="font-semibold text-green-400">

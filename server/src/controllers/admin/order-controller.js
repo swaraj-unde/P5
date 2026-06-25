@@ -54,3 +54,32 @@ export const getOrderDetails = async (req, res) => {
     });
   }
 };
+
+export const updateOrderStatus = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { orderStatus } = req.body;
+
+    const order = await Order.findById(orderId);
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found",
+      });
+    }
+
+    await Order.findByIdAndUpdate(orderId, { orderStatus });
+
+    return res.status(200).json({
+      success: true,
+      message: "Order status updated successfully",
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
