@@ -51,7 +51,7 @@ export default function ShoppingOrderDetailsView({ orderDetails }) {
             <div className="flex justify-between">
               <span className="text-zinc-400">Total</span>
               <Label className="text-green-400">
-                ${orderDetails?.totalAmount}
+                ₹{orderDetails?.totalAmount}
               </Label>
             </div>
 
@@ -117,7 +117,7 @@ export default function ShoppingOrderDetailsView({ orderDetails }) {
                   <p className="text-sm text-zinc-400">Qty: {item?.quantity}</p>
                 </div>
 
-                <p className="text-green-400 font-semibold">${item?.price}</p>
+                <p className="text-green-400 font-semibold">₹{item?.price}</p>
               </div>
             ))}
           </div>

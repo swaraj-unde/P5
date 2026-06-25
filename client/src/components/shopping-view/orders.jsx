@@ -65,7 +65,10 @@ export default function ShoppingOrders() {
             <TableBody>
               {orderList && orderList.length > 0
                 ? orderList.map((item) => (
-                    <TableRow key={item._id} className="border-zinc-800 hover:bg-zinc-900/60 transition-colors">
+                    <TableRow
+                      key={item._id}
+                      className="border-zinc-800 hover:bg-zinc-900/60 transition-colors"
+                    >
                       <TableCell className="font-medium text-white">
                         {item._id}
                       </TableCell>
@@ -81,7 +84,7 @@ export default function ShoppingOrders() {
                       </TableCell>
 
                       <TableCell className="font-semibold text-green-400">
-                        ${item.totalAmount}
+                        ₹{item.totalAmount}
                       </TableCell>
 
                       <TableCell className="text-right">
@@ -101,7 +104,9 @@ export default function ShoppingOrders() {
                             View Details
                           </Button>
 
-                          <ShoppingOrderDetailsView orderDetails={orderDetails} />
+                          <ShoppingOrderDetailsView
+                            orderDetails={orderDetails}
+                          />
                         </Dialog>
                       </TableCell>
                     </TableRow>

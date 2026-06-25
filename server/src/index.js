@@ -13,6 +13,8 @@ import shopProductRouter from "./routes/shop/product.routes.js";
 import shopCartRouter from "./routes/shop/cart.routes.js";
 import shopAddressRouter from "./routes/shop/address.routes.js";
 import shopOrderRouter from "./routes/shop/order.routes.js";
+import adminOrderRouter from "./routes/admin/order.routes.js";
+
 
 mongoose
   .connect(process.env.MONGO_URL)
@@ -44,7 +46,10 @@ app.use(cookieParse());
 app.use(express.json());
 
 app.use("/api/auth", authRouter);
+
 app.use("/api/admin/products", adminProductRouter);
+app.use("/api/admin/order", adminOrderRouter);
+
 app.use("/api/shop/products", shopProductRouter);
 app.use("/api/shop/cart", shopCartRouter);
 app.use("/api/shop/address", shopAddressRouter);
