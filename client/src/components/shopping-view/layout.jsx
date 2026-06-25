@@ -5,7 +5,6 @@ function ShopLayout() {
     <div>
       <div>
         <ShopHeader />
-        {/* Shop header */}
         <main>
           <Outlet></Outlet>
         </main>
