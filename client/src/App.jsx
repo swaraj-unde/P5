@@ -24,6 +24,8 @@ import PaypalReturnPage from "./pages/shopping-view/paypal-return";
 import PaymentSuccessPage from "./pages/shopping-view/payment-success";
 import SearchPage from "./pages/shopping-view/search";
 
+import { Navigate } from "react-router-dom";
+
 function App() {
   const { isAuthenticated, user, isLoading } = useSelector(
     (state) => state.auth,
@@ -40,6 +42,7 @@ function App() {
   return (
     <div>
       <Routes>
+        <Route path="/" element={<Navigate to="/auth/login" replace />} />
         <Route
           path="/auth"
           element={
@@ -65,7 +68,6 @@ function App() {
           <Route path="orders" element={<AdminOrders />}></Route>
           <Route path="products" element={<AdminProducts />}></Route>
         </Route>
-
         <Route
           path="/shop"
           element={
