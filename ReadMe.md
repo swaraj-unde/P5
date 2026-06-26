@@ -1,6 +1,8 @@
 # Style Hub
 
-A full-stack e-commerce platform built with React, Node.js, Express, and MongoDB. This application provides a complete shopping experience with user authentication, product management, shopping cart, order processing, and admin dashboard.
+StyleHub is a production-inspired full-stack MERN e-commerce application that delivers a complete online shopping experience with secure authentication, role-based access control, online payment integration, and a feature-rich admin dashboard. The platform enables users to browse products, search and filter items, manage shopping carts and addresses, place orders, track order status, and submit verified product reviews. Administrators can efficiently manage inventory, process customer orders, upload product images, and oversee platform operations through a dedicated dashboard.
+
+The application follows a scalable MVC architecture with RESTful APIs, secure JWT authentication using HTTP-only cookies, centralized state management with Redux Toolkit, and Cloudinary integration for media storage. Built with modern technologies including React 19, Express.js, MongoDB, Tailwind CSS, and PayPal, the project emphasizes clean architecture, reusable components, responsive design, and industry-standard development practices.
 
 ## Table of Contents
 
